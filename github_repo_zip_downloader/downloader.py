@@ -1,21 +1,18 @@
-import os
-import requests
+from __future__ import annotations
+
+import re
 import zipfile
 from io import BytesIO
-from typing import Optional, Union
+from pathlib import Path
 
+import requests
 from requests import PreparedRequest
 from requests.auth import AuthBase
 
+from . import utils
 
 BASE_URL = "https://api.github.com/repos/{}/{}/zipball/{}"
-
-
-def get_env_var(envvar: str) -> str:
-    var = os.getenv(envvar)
-    if var is None:
-        raise ValueError(f"Environment variable {envvar} unset.")
-    return var
+GITHUB_URL_REGEX =  r"https?://github.com/(?P<org>[\w-]+)/(?P<repo>[\w-]+)"
 
 
 class BearerTokenAuth(AuthBase):
@@ -31,14 +28,14 @@ class BearerTokenAuth(AuthBase):
 def download_repo(
     org_name: str,
     repo_name: str,
-    api_token: Optional[Union[bool, str]] = None,
-    branch: str = "master",
-    destination_path: str = ".",
+    api_token: bool | str | None = None,
+    branch: str | None = "master",
+    destination_path: Path | str = ".",
 ):
     if isinstance(api_token, str):
         authentication_header = BearerTokenAuth(api_token)
     elif api_token:
-        authentication_header = BearerTokenAuth(get_env_var("API_TOKEN"))
+        authentication_header = BearerTokenAuth(utils.get_env_var("API_TOKEN"))
     elif api_token is None:
         authentication_header = None
     else:
@@ -57,8 +54,30 @@ def download_repo(
     z.extractall(path=destination_path)
 
 
+def parse_url(repo_url: str) -> tuple[str, str]:
+    match_ = re.match(GITHUB_URL_REGEX, repo_url)
+    if not match_:
+        raise ValueError("Invalid URL:", repo_url)
+    org = match_.group("org")
+    repo = match_.group("repo")
+    return org, repo
+
+
+def download_repos(repos_file: Path, destination_dir: Path):
+    repos = utils.read_multiline_txt(repos_file)
+    for repo_url in repos:
+        try:
+            org, repo = parse_url(repo_url)
+        except ValueError as e:
+            print(e)
+            continue
+        download_repo(
+            org, repo, True, destination_path=str(destination_dir)
+        )
+
+
 if __name__ == "__main__":
     download_repo("TeiaLabs", "github-repo-zip-downloader")
     download_repo(
-        "TeiaLabs", "teia-code-search", True
+        "TeiaLabs", "codesearch-teia-set", True
     )
