@@ -67,7 +67,7 @@ def parse_url(repo_url: str) -> tuple[str, str]:
     return org, repo
 
 
-def download_repos(repos_file: Path, destination_dir: Path | str):
+def download_repos(repos_file: Path | str, destination_dir: Path | str):
     repos = utils.read_multiline_txt(repos_file)
     for repo_url in repos:
         try:

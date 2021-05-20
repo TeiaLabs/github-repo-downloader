@@ -20,6 +20,6 @@ def delete_matches(patterns: list[str], dir_path: Path):
     logger.debug(f"Deleted {len(matches)} matches.")
 
 
-def filter_paths(patterns_file: Path, dir_path: Path):
+def filter_paths(patterns_file: Path | str, dir_path: Path):
     patterns = utils.read_multiline_txt(patterns_file)
     delete_matches(patterns, dir_path)
