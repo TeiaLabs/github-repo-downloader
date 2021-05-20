@@ -17,7 +17,7 @@ from pathlib import Path
 
 import github_repo_zip_downloader
 
-github_repo_zip_downloader.main(repos_dir=Path("/tmp/"))
+github_repo_zip_downloader.run(repos_dir=Path("/tmp/"))
 ```
 
 ## Low level usage

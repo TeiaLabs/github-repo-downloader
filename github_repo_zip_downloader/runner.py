@@ -4,7 +4,7 @@ from .downloader import download_repos
 from .filter_repo import filter_paths
 
 
-def main(
+def run(
     repo_list_file: Path = Path("repo-list.txt"),
     blacklist: Path = Path("globblacklist.txt"),
     repos_dir: Path = Path("./temp"),
