@@ -18,7 +18,7 @@ requirements = read_multiline_as_list("requirements.txt")
 
 setuptools.setup(
     name="github-repo-zip-downloader",
-    version="1.0.1",
+    version="1.1.0",
     author="Teialabs",
     author_email="nei@teialabs.com",
     description="Python modules to batch download Github repositories as .zip, extract, and filter.",
