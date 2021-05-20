@@ -1,7 +1,7 @@
 import logging
 import sys
 
-FILE_HANDLER = logging.FileHandler(filename="/var/log/github-repo-zip-downloader.log")
+FILE_HANDLER = logging.FileHandler(filename="./logs/github-repo-zip-downloader.log")
 LOG_FILE_MESSAGE_FORMAT = logging.Formatter(" ".join((
     "[%(asctime)s]",
     "%(levelname)s -",
