@@ -63,7 +63,7 @@ def parse_url(repo_url: str) -> tuple[str, str]:
     return org, repo
 
 
-def download_repos(repos_file: Path, destination_dir: Path):
+def download_repos(repos_file: Path, destination_dir: Path | str):
     repos = utils.read_multiline_txt(repos_file)
     for repo_url in repos:
         try:
@@ -72,7 +72,7 @@ def download_repos(repos_file: Path, destination_dir: Path):
             print(e)
             continue
         download_repo(
-            org, repo, True, destination_path=str(destination_dir)
+            org, repo, True, destination_path=destination_dir
         )
 
 
