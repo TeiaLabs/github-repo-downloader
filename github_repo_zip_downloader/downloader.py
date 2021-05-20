@@ -9,10 +9,11 @@ import requests
 from requests import PreparedRequest
 from requests.auth import AuthBase
 
-from . import utils
+from . import loggers, utils
 
 BASE_URL = "https://api.github.com/repos/{}/{}/zipball/{}"
 GITHUB_URL_REGEX =  r"https?://github.com/(?P<org>[\w-]+)/(?P<repo>[\w-]+)"
+logger = loggers.get_logger()
 
 
 class BearerTokenAuth(AuthBase):
@@ -50,8 +51,11 @@ def download_repo(
         allow_redirects=True,
         stream=True,
     )
+    res.raise_for_status()
+    logger.debug(f"Downloaded {org_name}/{repo_name} to memory.")
     z = zipfile.ZipFile(BytesIO(res.content))
     z.extractall(path=destination_path)
+    logger.debug(f"Exctracted {org_name}/{repo_name} to {destination_path}.")
 
 
 def parse_url(repo_url: str) -> tuple[str, str]:
@@ -68,12 +72,15 @@ def download_repos(repos_file: Path, destination_dir: Path | str):
     for repo_url in repos:
         try:
             org, repo = parse_url(repo_url)
-        except ValueError as e:
-            print(e)
+        except ValueError:
+            logger.error(f"Could not parse URL {repo_url}.")
             continue
-        download_repo(
-            org, repo, True, destination_path=destination_dir
-        )
+        try:
+            download_repo(
+                org, repo, True, destination_path=destination_dir
+            )
+        except requests.exceptions.RequestException as e:
+            logger.error(f"Could not download {org}/{repo} because of {e}")
 
 
 if __name__ == "__main__":
