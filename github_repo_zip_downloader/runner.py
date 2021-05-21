@@ -8,8 +8,9 @@ from .filter_repo import filter_paths
 
 def run(
     repo_list_file: Path | str = "repo-list.txt",
-    blacklist: Path | str = "globblacklist.txt",
+    blacklist: Path | str | None = "globblacklist.txt",
     repos_dir: Path = Path("./temp"),
 ):
     download_repos(repo_list_file, repos_dir)
-    filter_paths(blacklist, repos_dir)
+    if blacklist:
+        filter_paths(blacklist, repos_dir)
