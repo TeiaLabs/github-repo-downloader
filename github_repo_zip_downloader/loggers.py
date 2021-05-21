@@ -1,7 +1,12 @@
 import logging
 import sys
+from pathlib import Path
 
-FILE_HANDLER = logging.FileHandler(filename="./logs/github-repo-zip-downloader.log")
+from . import utils
+
+LOG_FILE_PATH = Path("./logs/github-repo-zip-downloader.log")
+utils.ensure_dir(LOG_FILE_PATH)
+FILE_HANDLER = logging.FileHandler(filename=LOG_FILE_PATH)
 LOG_FILE_MESSAGE_FORMAT = logging.Formatter(" ".join((
     "[%(asctime)s]",
     "%(levelname)s -",

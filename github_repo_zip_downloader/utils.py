@@ -8,6 +8,12 @@ from .loggers import get_logger
 logger = get_logger()
 
 
+def ensure_dir(dir_path: Path):
+    if dir_path.is_file():
+        dir_path = dir_path.parent
+    dir_path.mkdir(parents=True, exist_ok=True)
+
+
 def get_env_var(envvar: str) -> str:
     var = os.getenv(envvar)
     if var is None:
