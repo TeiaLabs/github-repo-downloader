@@ -12,7 +12,7 @@ from requests.auth import AuthBase
 from . import loggers, utils
 
 BASE_URL = "https://api.github.com/repos/{}/{}/zipball/{}"
-GITHUB_URL_REGEX =  r"https?://github.com/(?P<org>[\w-]+)/(?P<repo>[\w-]+)"
+GITHUB_URL_REGEX = r"https?://github.com/(?P<org>[\w-]+)/(?P<repo>[\w-]+)"
 logger = loggers.get_logger()
 
 
@@ -77,14 +77,10 @@ def download_repos(repos_file: Path | str, destination_dir: Path | str):
             continue
         try:
             download_repo(
-                org, repo, True, destination_path=destination_dir
+                org_name=org,
+                repo_name=repo,
+                api_token=True,
+                destination_path=destination_dir,
             )
         except requests.exceptions.RequestException as e:
             logger.error(f"Could not download {org}/{repo} because of {e}")
-
-
-if __name__ == "__main__":
-    download_repo("TeiaLabs", "github-repo-zip-downloader")
-    download_repo(
-        "TeiaLabs", "codesearch-teia-set", True
-    )
