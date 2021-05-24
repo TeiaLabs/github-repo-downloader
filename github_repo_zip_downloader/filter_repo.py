@@ -16,7 +16,11 @@ def delete_matches(patterns: list[str], dir_path: Path):
         if file.is_dir():
             shutil.rmtree(file)
         else:
-            file.unlink()
+            try:
+                file.unlink()
+            except FileNotFoundError:
+                # file might've already been deleted by an rmtree()
+                pass
     logger.debug(f"Deleted {len(matches)} matches.")
 
 

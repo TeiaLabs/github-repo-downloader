@@ -2,10 +2,8 @@ import logging
 import sys
 from pathlib import Path
 
-from . import utils
-
 LOG_FILE_PATH = Path("./logs/github-repo-zip-downloader.log")
-utils.ensure_dir(LOG_FILE_PATH)
+LOG_FILE_PATH.parent.mkdir(exist_ok=True)
 FILE_HANDLER = logging.FileHandler(filename=LOG_FILE_PATH)
 LOG_FILE_MESSAGE_FORMAT = logging.Formatter(" ".join((
     "[%(asctime)s]",
