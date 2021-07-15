@@ -30,9 +30,6 @@ download_repo("TeiaLabs", "github-repo-zip-downloader")
 
 ## Private repos
 
-If you're into private repos, you can also use this tool.
-Just don't forget to create a Github API token for yourself at <https://github.com/settings/tokens/new>.
+To use this tool with private repos, create a Github API token for yourself at <https://github.com/settings/tokens/new>.
 
-The recommended way to use it is to export it in your env with `export API_TOKEN=ghp_...` and `download_repo("org", "repo", api_token=True)`.
-
-But you could also pass the token string as an argument directly to `download_repo`.
+Then export it in your env with `export API_TOKEN=ghp_...`.
