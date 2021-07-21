@@ -1,10 +1,12 @@
 from __future__ import annotations
 
+import os
 import re
 import zipfile
 from functools import wraps
 from io import BytesIO
 from pathlib import Path
+from typing import Callable
 
 import requests
 from requests import PreparedRequest
@@ -28,19 +30,15 @@ class BearerTokenAuth(AuthBase):
         return r
 
 
-def authenticate(wrapped):
+def authenticate(wrapped: Callable) -> Callable:
     # TODO type hints
     @wraps(wrapped)
     def new_func(*args, **kwargs):
-        api_token = kwargs.pop("api_token")
-        if isinstance(api_token, str):
+        api_token = os.getenv("API_TOKEN")
+        if api_token:
             authentication_header = BearerTokenAuth(api_token)
-        elif api_token:
-            authentication_header = BearerTokenAuth(utils.get_env_var("API_TOKEN"))
-        elif api_token is None:
-            authentication_header = None
         else:
-            raise ValueError("Param 'api_token' got unexpected value.")
+            authentication_header = None
         return wrapped(*args, api_token=authentication_header, **kwargs)
     return new_func
 
@@ -49,7 +47,7 @@ def authenticate(wrapped):
 def get_repos_default_branch(
     org_name: str,
     repo_name: str,
-    api_token: bool | str | None = None,
+    api_token: str | None,
 ) -> str:
     zip_url = REPO_INFO_URL.format(org_name, repo_name)
     res = requests.get(
@@ -70,7 +68,7 @@ def get_repos_default_branch(
 def download_repo(
     org_name: str,
     repo_name: str,
-    api_token: bool | str | None = None,
+    api_token: str | None,
     branch: str | None = None,
     destination_path: Path | str = ".",
 ):
@@ -108,12 +106,10 @@ def download_repos(repos_file: Path | str, destination_dir: Path | str):
             logger.error(f"Could not parse URL {repo_url}.")
             continue
         try:
-            print()
             download_repo(
                 org_name=org,
                 repo_name=repo,
-                api_token=True,
-                branch=get_repos_default_branch(org, repo, api_token=True),
+                branch=get_repos_default_branch(org, repo),
                 destination_path=destination_dir,
             )
         except requests.exceptions.RequestException as e:
