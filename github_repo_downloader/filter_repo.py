@@ -6,7 +6,7 @@ from pathlib import Path
 
 from . import loggers, utils
 
-logger = loggers.get_logger()
+logger = loggers.MyLogger.get_logger(__name__)
 
 
 def delete_matches(patterns: list[str], dir_path: Path):

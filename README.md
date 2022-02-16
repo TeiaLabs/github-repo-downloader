@@ -1,14 +1,14 @@
-# github-repo-zip-downloader
+# github-repo-downloader
 
 Download Github repositories with python.
 
 ## Installation
 
-`pip install git+https://github.com/TeiaLabs/github-repo-zip-downloader.git@master`
+`pip install git+https://github.com/TeiaLabs/github-repo-downloader.git@master`
 
 And on your `requirements.txt`:
 
-`github-repo-zip-downloader @ git+https://github.com/TeiaLabs/github-repo-zip-downloader.git@master`
+`github-repo-downloader @ git+https://github.com/TeiaLabs/github-repo-downloader.git@master`
 
 ## Usage
 
@@ -20,16 +20,12 @@ import github_repo_zip_downloader
 github_repo_zip_downloader.run(repos_dir=Path("/tmp/"))
 ```
 
-## Low level usage
+## CLI usage (WIP)
 
-```python
-from github_repo_zip_downloader import download_repo
-
-download_repo("TeiaLabs", "github-repo-zip-downloader")
+```bash
+github-repo-downloader
 ```
 
 ## Private repos
 
-To use this tool with private repos, create a Github API token for yourself at <https://github.com/settings/tokens/new>.
-
-Then export it in your env with `export API_TOKEN=ghp_...`.
+To use this tool with private repos, make sure your SSH agent has a key with access to them or provide its path to the `custom_ssh_key` kwarg.

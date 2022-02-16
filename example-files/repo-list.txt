@@ -1,3 +1,2 @@
 https://github.com/TeiaLabs/git-annex-file-downloader
 https://github.com/TeiaLabs/codesearch-teia-set
-https://github.com/TeiaLabs/teia-code-search
