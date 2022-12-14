@@ -15,7 +15,7 @@ class Args(Tap):
 
 def list_repos(github, org):
     for repo in github.get_organization(org).get_repos():
-        print(f"{args.org}/{repo.name}")
+        print(f"{org}/{repo.name}")
 
 def list_repos_http(github, org):
     for repo in github.get_organization(org).get_repos():
@@ -24,7 +24,7 @@ def list_repos_http(github, org):
 
 def list_repos_ssh(github, org):
      for repo in github.get_organization(org).get_repos():
-        print(f"git@github.com:{args.org}/{repo.name}")
+        print(f"git@github.com:{org}/{repo.name}")
 
 
 def main(github_client: Github, org_name: str):
